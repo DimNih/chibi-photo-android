@@ -1,0 +1,51 @@
+com.chibi.photo.app-ui-tooling-release-0 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\08669bbe0c73fdd0e4fbdedfd4890e84\transformed\ui-tooling-release\res
+com.chibi.photo.app-material-icons-core-release-1 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\1020a65b5cab70ab226691a985323fa1\transformed\material-icons-core-release\res
+com.chibi.photo.app-core-ktx-1.15.0-2 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\168ccc30538d6d5886e1803aa79a5f41\transformed\core-ktx-1.15.0\res
+com.chibi.photo.app-ui-tooling-data-release-3 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\18505f7e739f5460e2d0bb46c11ff6be\transformed\ui-tooling-data-release\res
+com.chibi.photo.app-lifecycle-viewmodel-release-4 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\193af2b6e9a3f1e5cc1c9b8f9cbb01ba\transformed\lifecycle-viewmodel-release\res
+com.chibi.photo.app-activity-1.10.1-5 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\328fd9a6b7baf2bc988b62e43e75d413\transformed\activity-1.10.1\res
+com.chibi.photo.app-savedstate-1.2.1-6 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\33b90c0e41b190a5faf4cf1e521e3ebd\transformed\savedstate-1.2.1\res
+com.chibi.photo.app-ui-tooling-preview-release-7 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\4f5b018ad181474da78e350ea575fd6b\transformed\ui-tooling-preview-release\res
+com.chibi.photo.app-core-viewtree-1.0.0-8 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\5569fc32763e9ddca1a9d884e379e3cb\transformed\core-viewtree-1.0.0\res
+com.chibi.photo.app-core-runtime-2.2.0-9 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\5d670ca70b24aaa67afd1f629216e561\transformed\core-runtime-2.2.0\res
+com.chibi.photo.app-startup-runtime-1.1.1-10 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\618f0c62d789522c4e5acf23ca169080\transformed\startup-runtime-1.1.1\res
+com.chibi.photo.app-customview-poolingcontainer-1.0.0-11 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\62f85315fd0fe86acb526d97ea901d60\transformed\customview-poolingcontainer-1.0.0\res
+com.chibi.photo.app-lifecycle-viewmodel-ktx-2.8.7-12 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\65d3676d8c44aff069f5a0bd3347b3bc\transformed\lifecycle-viewmodel-ktx-2.8.7\res
+com.chibi.photo.app-ui-graphics-release-13 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\67602fe4d7ab14d387413293854fe3d8\transformed\ui-graphics-release\res
+com.chibi.photo.app-ui-geometry-release-14 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\715fa669d0f73229cbfa67f9edec747d\transformed\ui-geometry-release\res
+com.chibi.photo.app-core-1.15.0-15 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\71e2962aad0acc6a37f81fc2bfe8cb35\transformed\core-1.15.0\res
+com.chibi.photo.app-ui-unit-release-16 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\758345df424d296cf1cc33d869e31681\transformed\ui-unit-release\res
+com.chibi.photo.app-lifecycle-runtime-release-17 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\78fbc81d694b3526f81c0f4136b7b656\transformed\lifecycle-runtime-release\res
+com.chibi.photo.app-lifecycle-livedata-core-2.8.7-18 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\88073be9a6843b7dd0557011d822cff8\transformed\lifecycle-livedata-core-2.8.7\res
+com.chibi.photo.app-material3-release-19 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\929b04eef202a68f767322466b8f9db1\transformed\material3-release\res
+com.chibi.photo.app-runtime-release-20 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\9926af06913e0be1afff722be848ea69\transformed\runtime-release\res
+com.chibi.photo.app-material-ripple-release-21 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\a1116ca4d4d34469b942ac2d52610fb6\transformed\material-ripple-release\res
+com.chibi.photo.app-ui-text-release-22 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\a1457e795025c771e48d5a323a018d86\transformed\ui-text-release\res
+com.chibi.photo.app-foundation-layout-release-23 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\a29d45604cec8af0a8678567fa268838\transformed\foundation-layout-release\res
+com.chibi.photo.app-runtime-saveable-release-24 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\b2e52a71f8fb61172029c535094c4514\transformed\runtime-saveable-release\res
+com.chibi.photo.app-graphics-path-1.0.1-25 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\b3aff07a17a9557edb06546cfdd88f8f\transformed\graphics-path-1.0.1\res
+com.chibi.photo.app-lifecycle-process-2.8.7-26 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\c80c90ee07f7be4b9a70e02707acbf04\transformed\lifecycle-process-2.8.7\res
+com.chibi.photo.app-ui-release-27 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\c9f77f3cebb4bfc0a38b7779c119a89e\transformed\ui-release\res
+com.chibi.photo.app-animation-release-28 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\cf7f5878fbf165e05ed326793bc4ac5d\transformed\animation-release\res
+com.chibi.photo.app-emoji2-1.3.0-29 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\d0f5e0184b16ce96ddc4957413974108\transformed\emoji2-1.3.0\res
+com.chibi.photo.app-lifecycle-viewmodel-savedstate-2.8.7-30 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\d22692f028f81ef4796411cbc02a522c\transformed\lifecycle-viewmodel-savedstate-2.8.7\res
+com.chibi.photo.app-lifecycle-runtime-compose-release-31 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\d40032a4a90b19d66de27419d87a13df\transformed\lifecycle-runtime-compose-release\res
+com.chibi.photo.app-material-icons-extended-release-32 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\e4fcffbf7c2aeedc2c5964f19eab9012\transformed\material-icons-extended-release\res
+com.chibi.photo.app-tracing-1.2.0-33 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\eaab6d629588579993b3b02538d73989\transformed\tracing-1.2.0\res
+com.chibi.photo.app-material-release-34 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\eb49029f488e94b4b17bd250fed67d05\transformed\material-release\res
+com.chibi.photo.app-animation-core-release-35 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\eb9ab241673fbbbdff88b44c4c600f9b\transformed\animation-core-release\res
+com.chibi.photo.app-annotation-experimental-1.4.1-36 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\ee9e2aa00271400c3e28fa04f6d78f20\transformed\annotation-experimental-1.4.1\res
+com.chibi.photo.app-activity-compose-1.10.1-37 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\eedab24ef3ed0edc60b2e916dd3301df\transformed\activity-compose-1.10.1\res
+com.chibi.photo.app-activity-ktx-1.10.1-38 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\f04679813ffe4ae824c43b3191615b73\transformed\activity-ktx-1.10.1\res
+com.chibi.photo.app-savedstate-ktx-1.2.1-39 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\f39d606d68541bd1793a801f0a145b66\transformed\savedstate-ktx-1.2.1\res
+com.chibi.photo.app-foundation-release-40 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\f58895a252a6e026425901721d5a3e75\transformed\foundation-release\res
+com.chibi.photo.app-lifecycle-runtime-ktx-release-41 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\f6ea0abcafe268fc20d142a44abe1e5c\transformed\lifecycle-runtime-ktx-release\res
+com.chibi.photo.app-profileinstaller-1.4.0-42 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\fa3043058af95d3235d78d7198b5496f\transformed\profileinstaller-1.4.0\res
+com.chibi.photo.app-ui-util-release-43 C:\Users\Dimas Erlansyah\.gradle\caches\8.14\transforms\fc0c12590b60818c20887953d883ad47\transformed\ui-util-release\res
+com.chibi.photo.app-pngs-44 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\build\generated\res\pngs\debug
+com.chibi.photo.app-resValues-45 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\build\generated\res\resValues\debug
+com.chibi.photo.app-packageDebugResources-46 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.chibi.photo.app-packageDebugResources-47 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.chibi.photo.app-debug-48 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\build\intermediates\merged_res\debug\mergeDebugResources
+com.chibi.photo.app-debug-49 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\src\debug\res
+com.chibi.photo.app-main-50 C:\Users\Dimas Erlansyah\Documents\PROJEK SAYA\chibi-photo\app\src\main\res

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="accent_cobalt">#38BDF8</color>
+    <color name="ink_bg">#0B0D14</color>
+    <color name="ink_card">#11141C</color>
+    <color name="ink_deepest">#07080D</color>
+    <color name="ink_text_primary">#EEF0F5</color>
+    <color name="ink_text_secondary">#A3A9B8</color>
+    <string name="app_name">Puni Studio</string>
+    <string name="tagline">Tactile portrait mesh and spring workbench</string>
+    <style name="Theme.PuniStudio" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">#0B0D14</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">#07080D</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:windowBackground">#0B0D14</item>
+    </style>
+</resources>
