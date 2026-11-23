@@ -1,4 +1,0 @@
-#Mon Nov 23 21:43:07 WIB 2026
-base.0=C\:\\Users\\Dimas Erlansyah\\Documents\\PROJEK SAYA\\chibi-photo\\app\\build\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
