@@ -35,17 +35,19 @@ import com.chibi.photo.export.ExportManager
 import com.chibi.photo.export.GifEncoder
 import com.chibi.photo.haptics.HapticManager
 import com.chibi.photo.physics.*
+import com.chibi.photo.ui.AppLanguage
+import com.chibi.photo.ui.AppStrings
 import com.chibi.photo.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-enum class StudioTab(val label: String) {
-    TOUCH("Touch"),
-    MASK("Mask"),
-    BOUNCE("Bounce"),
-    SOUND("Sound")
+enum class StudioTab {
+    TOUCH,
+    MASK,
+    BOUNCE,
+    SOUND
 }
 
 @Composable
@@ -54,10 +56,15 @@ fun MochiPlayScreen(
     specimenTitle: String,
     initialMaterial: MaterialPreset,
     initialZone: ZoneTemplate,
+    isDarkMode: Boolean,
+    onToggleDarkMode: () -> Unit,
+    currentLanguage: AppLanguage,
+    onToggleLanguage: () -> Unit,
     onBackToStudio: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val strings = AppStrings.forLang(currentLanguage)
 
     val engine = remember(sourceBitmap) {
         MochiMeshEngine(meshWidth = 32, meshHeight = 32).apply {
@@ -140,16 +147,16 @@ fun MochiPlayScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BlueBackground)
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        // 1. Clean Top Bar
+        // Top App Bar: Back + Title + Language Toggle + Dark Mode Toggle + Photo + GIF
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
@@ -158,25 +165,69 @@ fun MochiPlayScreen(
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Outlined.ArrowBack,
-                    contentDescription = "Back",
-                    tint = TextSecondary,
+                    contentDescription = strings.back,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.size(20.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(6.dp))
+            Spacer(modifier = Modifier.width(4.dp))
 
             Text(
                 text = specimenTitle,
                 style = MaterialTheme.typography.titleMedium,
-                color = TextPrimary,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier.weight(1f)
             )
+
+            // Language Toggle Pill
+            Surface(
+                modifier = Modifier
+                    .height(32.dp)
+                    .clickable { onToggleLanguage() },
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = if (currentLanguage == AppLanguage.ID) "🇮🇩 ID" else "🇬🇧 EN",
+                        style = MonoTabularStyle,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(6.dp))
+
+            // Dark/Light Mode Toggle
+            Surface(
+                modifier = Modifier
+                    .size(32.dp)
+                    .clickable { onToggleDarkMode() },
+                shape = RoundedCornerShape(8.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = if (isDarkMode) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                        contentDescription = if (isDarkMode) strings.lightMode else strings.darkMode,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.width(6.dp))
 
             // Snapshot Button
             Surface(
                 modifier = Modifier
-                    .height(34.dp)
+                    .height(32.dp)
                     .clickable {
                         scope.launch {
                             val snap = Bitmap.createBitmap(
@@ -188,41 +239,41 @@ fun MochiPlayScreen(
                             engine.drawMesh(c, sourceBitmap, Paint(Paint.FILTER_BITMAP_FLAG))
                             val uri = exportManager.saveSnapshotToGallery(snap, "chibi_photo")
                             if (uri != null) {
-                                Toast.makeText(context, "Saved to gallery", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, strings.exportSuccessMessage, Toast.LENGTH_SHORT).show()
                                 exportResultUri = uri
                                 showExportDialog = true
                             }
                         }
                     },
                 shape = RoundedCornerShape(8.dp),
-                color = BlueRaised,
-                border = BorderStroke(1.dp, BlueHairline)
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 12.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.CameraAlt,
-                        contentDescription = "Photo",
-                        tint = TextSecondary,
-                        modifier = Modifier.size(16.dp)
+                        contentDescription = strings.exportSnapshot,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(15.dp)
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Photo",
+                        text = strings.exportSnapshot,
                         style = MaterialTheme.typography.labelLarge,
-                        color = TextPrimary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(6.dp))
 
-            // Solid Blue GIF Record Button
+            // Solid Flat Blue GIF Record Button
             Surface(
                 modifier = Modifier
-                    .height(34.dp)
+                    .height(32.dp)
                     .clickable {
                         if (!isRecording) {
                             isRecording = true
@@ -248,37 +299,37 @@ fun MochiPlayScreen(
                         }
                     },
                 shape = RoundedCornerShape(8.dp),
-                color = if (isRecording) SemanticRed else PrimaryBlue
+                color = if (isRecording) SemanticRed else MaterialTheme.colorScheme.primary
             ) {
                 Row(
-                    modifier = Modifier.padding(horizontal = 12.dp),
+                    modifier = Modifier.padding(horizontal = 10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(8.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(TextPrimary)
+                            .size(7.dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .background(MaterialTheme.colorScheme.onPrimary)
                     )
-                    Spacer(modifier = Modifier.width(6.dp))
+                    Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = if (isRecording) "${String.format("%.1f", recordingSeconds)}s" else "Save GIF",
+                        text = if (isRecording) "${String.format("%.1f", recordingSeconds)}s" else strings.exportGif,
                         style = MaterialTheme.typography.labelLarge,
-                        color = TextPrimary
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
         }
 
-        // 2. Central 1:1 Interactive Canvas Stage
+        // Central Squishy Canvas Stage (Zero gradients, flat surface)
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 4.dp)
+                .padding(horizontal = 14.dp, vertical = 4.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(BlueDeepest)
-                .border(1.dp, BlueHairline, RoundedCornerShape(16.dp)),
+                .background(StudioTheme.extended.bgBackdrop)
+                .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(16.dp)),
             contentAlignment = Alignment.Center
         ) {
             val meshPaint = remember {
@@ -293,11 +344,14 @@ fun MochiPlayScreen(
                     .coerceIn(0.5f, 2.0f)
             }
 
+            val primaryColor = MaterialTheme.colorScheme.primary
+            val symmetryLineColor = primaryColor.copy(alpha = 0.45f)
+
             Canvas(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(aspectRatio)
-                    .padding(16.dp)
+                    .padding(14.dp)
                     .pointerInput(sourceBitmap, activeTab, activeTool, isSculptEraser, mirrorSymmetryX, sculptBrushRadius) {
                         awaitPointerEventScope {
                             while (true) {
@@ -353,7 +407,7 @@ fun MochiPlayScreen(
 
                 if (activeTab == StudioTab.MASK && mirrorSymmetryX) {
                     drawLine(
-                        color = PrimaryBlueLight.copy(alpha = 0.45f),
+                        color = symmetryLineColor,
                         start = Offset(w * 0.5f, 0f),
                         end = Offset(w * 0.5f, h),
                         strokeWidth = 1.5f
@@ -376,24 +430,26 @@ fun MochiPlayScreen(
                 }
             }
 
-            // Minimal top-left live waveform & reset pill
+            // Waveform and Controls Overlay
             Row(
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(10.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Waveform Chip
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(BlueCard)
-                        .border(1.dp, BlueHairline, RoundedCornerShape(8.dp))
-                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 8.dp, vertical = 5.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Canvas(modifier = Modifier.size(width = 48.dp, height = 14.dp)) {
+                    val primaryColor = MaterialTheme.colorScheme.primary
+                    Canvas(modifier = Modifier.size(width = 44.dp, height = 12.dp)) {
                         if (frameTicker > 0L) {}
                         val hist = engine.waveformHistory
                         val stepX = size.width / (hist.size - 1).coerceAtLeast(1)
@@ -404,50 +460,59 @@ fun MochiPlayScreen(
                             val y = midY - (hist[i] * size.height * 0.75f)
                             if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
                         }
-                        drawPath(path = path, color = PrimaryBlueLight, style = Stroke(width = 2.0f))
+                        drawPath(path = path, color = primaryColor, style = Stroke(width = 1.8f))
                     }
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(6.dp))
                     Text(
                         text = "${String.format("%.1f", freqState)} Hz",
                         style = MonoTabularStyle,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
+                // Grid & Reset Buttons
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(if (wireframeLattice) PrimaryBlue else BlueCard)
-                            .border(1.dp, BlueHairline, RoundedCornerShape(8.dp))
+                            .background(
+                                if (wireframeLattice)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.surface
+                            )
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                             .clickable {
                                 wireframeLattice = !wireframeLattice
                                 engine.showWireframeLattice = wireframeLattice
                             }
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
                     ) {
                         Text(
-                            text = "Grid",
+                            text = if (currentLanguage == AppLanguage.ID) "Kisi" else "Grid",
                             style = MonoTabularStyle,
-                            color = if (wireframeLattice) TextPrimary else TextSecondary
+                            color = if (wireframeLattice)
+                                MaterialTheme.colorScheme.onPrimary
+                            else
+                                MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
 
                     Box(
                         modifier = Modifier
                             .clip(RoundedCornerShape(8.dp))
-                            .background(BlueCard)
-                            .border(1.dp, BlueHairline, RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surface)
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                             .clickable {
                                 engine.resetToResting()
                                 engine.triggerImpulseWave(0.4f, 280f)
                             }
-                            .padding(horizontal = 10.dp, vertical = 6.dp)
+                            .padding(horizontal = 10.dp, vertical = 5.dp)
                     ) {
                         Text(
-                            text = "Reset",
+                            text = strings.reset,
                             style = MonoTabularStyle,
-                            color = TextSecondary
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
@@ -457,69 +522,84 @@ fun MochiPlayScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(BlueDeepest.copy(alpha = 0.90f)),
+                        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.90f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        CircularProgressIndicator(color = PrimaryBlueLight, strokeWidth = 2.dp)
+                        CircularProgressIndicator(color = MaterialTheme.colorScheme.primary, strokeWidth = 2.dp)
                         Spacer(modifier = Modifier.height(12.dp))
                         Text(
-                            text = "Saving GIF...",
+                            text = strings.encodingMessage,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = TextPrimary
+                            color = MaterialTheme.colorScheme.onBackground
                         )
                     }
                 }
             }
         }
 
-        // 3. Clean Bottom Control Dock (Concise labels, zero clutter)
+        // Bottom Control Dock (Clean flat card, zero gradients)
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 14.dp, vertical = 6.dp),
             shape = RoundedCornerShape(16.dp),
-            color = BlueCard,
-            border = BorderStroke(1.dp, BlueHairline)
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
         ) {
             Column(modifier = Modifier.padding(12.dp)) {
-                // 4 Main Tabs
+                // 4 Studio Tabs
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     for (tab in StudioTab.entries) {
                         val selected = (tab == activeTab)
+                        val tabLabel = when (tab) {
+                            StudioTab.TOUCH -> strings.tabTouch
+                            StudioTab.MASK -> strings.tabMask
+                            StudioTab.BOUNCE -> strings.tabBounce
+                            StudioTab.SOUND -> strings.tabSound
+                        }
                         Box(
                             modifier = Modifier
                                 .weight(1f)
                                 .height(36.dp)
                                 .clip(RoundedCornerShape(8.dp))
-                                .background(if (selected) PrimaryBlue else BlueDeepest)
+                                .background(
+                                    if (selected)
+                                        MaterialTheme.colorScheme.primary
+                                    else
+                                        MaterialTheme.colorScheme.surfaceVariant
+                                )
                                 .border(
                                     1.dp,
-                                    if (selected) PrimaryBlueLight else BlueHairline,
+                                    if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                                     RoundedCornerShape(8.dp)
                                 )
                                 .clickable { activeTab = tab },
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = tab.label,
+                                text = tabLabel,
                                 style = MaterialTheme.typography.labelLarge,
-                                color = if (selected) TextPrimary else TextSecondary
+                                color = if (selected)
+                                    MaterialTheme.colorScheme.onPrimary
+                                else
+                                    MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
 
                 when (activeTab) {
                     StudioTab.TOUCH -> {
                         TouchDockPanel(
                             activeTool = activeTool,
                             pulseBpm = pulseBpmState,
+                            currentLanguage = currentLanguage,
                             onSelectTool = { tool ->
                                 activeTool = tool
                                 engine.activeTool = tool
@@ -536,6 +616,7 @@ fun MochiPlayScreen(
                             isEraser = isSculptEraser,
                             mirrorSymmetryX = mirrorSymmetryX,
                             brushRadius = sculptBrushRadius,
+                            currentLanguage = currentLanguage,
                             onToggleEraser = { isSculptEraser = it },
                             onToggleMirror = { mirrorSymmetryX = it },
                             onBrushRadiusChange = { sculptBrushRadius = it },
@@ -552,6 +633,7 @@ fun MochiPlayScreen(
                             freq = freqState,
                             zeta = zetaState,
                             softness = softnessState,
+                            currentLanguage = currentLanguage,
                             onSelectPreset = { preset ->
                                 activeMaterial = preset
                                 engine.applyMaterialPreset(preset)
@@ -581,6 +663,7 @@ fun MochiPlayScreen(
                             soundEnabled = soundEnabled,
                             hapticEnabled = hapticEnabled,
                             soundProfile = soundProfile,
+                            currentLanguage = currentLanguage,
                             onToggleBlush = {
                                 reactiveBlush = it
                                 engine.enableReactiveBlush = it
@@ -610,16 +693,16 @@ fun MochiPlayScreen(
             onDismissRequest = { showExportDialog = false },
             title = {
                 Text(
-                    text = "Saved to gallery",
+                    text = strings.exportSuccessTitle,
                     style = MaterialTheme.typography.headlineMedium,
-                    color = TextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             },
             text = {
                 Text(
-                    text = "Share your creation or keep editing",
+                    text = strings.exportSuccessMessage,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = TextSecondary
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             },
             confirmButton = {
@@ -630,20 +713,20 @@ fun MochiPlayScreen(
                         showExportDialog = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = PrimaryBlue,
-                        contentColor = TextPrimary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     shape = RoundedCornerShape(8.dp)
                 ) {
-                    Text("Share", style = MaterialTheme.typography.labelLarge, color = TextPrimary)
+                    Text(strings.actionShare, style = MaterialTheme.typography.labelLarge)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { showExportDialog = false }) {
-                    Text("Close", style = MaterialTheme.typography.labelLarge, color = TextSecondary)
+                    Text(strings.actionDone, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             },
-            containerColor = BlueCard,
+            containerColor = MaterialTheme.colorScheme.surface,
             shape = RoundedCornerShape(16.dp)
         )
     }
@@ -653,9 +736,12 @@ fun MochiPlayScreen(
 private fun TouchDockPanel(
     activeTool: KineticTool,
     pulseBpm: Float,
+    currentLanguage: AppLanguage,
     onSelectTool: (KineticTool) -> Unit,
     onBpmChange: (Float) -> Unit
 ) {
+    val strings = AppStrings.forLang(currentLanguage)
+
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -663,24 +749,39 @@ private fun TouchDockPanel(
         ) {
             for (tool in KineticTool.entries) {
                 val selected = (tool == activeTool)
+                val toolLabel = when (tool) {
+                    KineticTool.PULL -> strings.toolPinch
+                    KineticTool.POKE -> strings.toolPoke
+                    KineticTool.SWIRL -> strings.toolSwirl
+                    KineticTool.PULSE -> strings.toolPulse
+                    KineticTool.GYRO -> strings.toolGravity
+                }
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(38.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (selected) PrimaryBlueContainer else BlueRaised)
+                        .background(
+                            if (selected)
+                                MaterialTheme.colorScheme.primaryContainer
+                            else
+                                MaterialTheme.colorScheme.surfaceVariant
+                        )
                         .border(
                             1.dp,
-                            if (selected) PrimaryBlueLight else BlueHairline,
+                            if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                             RoundedCornerShape(8.dp)
                         )
                         .clickable { onSelectTool(tool) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = tool.label,
+                        text = toolLabel,
                         style = MaterialTheme.typography.labelLarge,
-                        color = if (selected) TextPrimary else TextSecondary
+                        color = if (selected)
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        else
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -689,7 +790,7 @@ private fun TouchDockPanel(
         if (activeTool == KineticTool.PULSE) {
             Spacer(modifier = Modifier.height(10.dp))
             CompactSliderRow(
-                label = "Tempo",
+                label = if (currentLanguage == AppLanguage.ID) "Tempo" else "Tempo",
                 value = pulseBpm,
                 range = 60f..180f,
                 formatted = "${pulseBpm.toInt()} bpm",
@@ -704,30 +805,33 @@ private fun MaskDockPanel(
     isEraser: Boolean,
     mirrorSymmetryX: Boolean,
     brushRadius: Float,
+    currentLanguage: AppLanguage,
     onToggleEraser: (Boolean) -> Unit,
     onToggleMirror: (Boolean) -> Unit,
     onBrushRadiusChange: (Float) -> Unit,
     onApplyTemplate: (ZoneTemplate) -> Unit
 ) {
+    val strings = AppStrings.forLang(currentLanguage)
+
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            BlueChipButton(
-                text = "Paint",
+            FlatChipButton(
+                text = strings.sculptDraw,
                 selected = !isEraser,
                 onClick = { onToggleEraser(false) },
                 modifier = Modifier.weight(1f)
             )
-            BlueChipButton(
-                text = "Erase",
+            FlatChipButton(
+                text = strings.sculptErase,
                 selected = isEraser,
                 onClick = { onToggleEraser(true) },
                 modifier = Modifier.weight(1f)
             )
-            BlueChipButton(
-                text = "Mirror",
+            FlatChipButton(
+                text = strings.sculptSymmetry,
                 selected = mirrorSymmetryX,
                 onClick = { onToggleMirror(!mirrorSymmetryX) },
                 modifier = Modifier.weight(1f)
@@ -737,7 +841,7 @@ private fun MaskDockPanel(
         Spacer(modifier = Modifier.height(8.dp))
 
         CompactSliderRow(
-            label = "Size",
+            label = strings.sculptBrushSize,
             value = brushRadius,
             range = 28f..150f,
             formatted = "${brushRadius.toInt()} px",
@@ -753,20 +857,27 @@ private fun MaskDockPanel(
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             for (template in ZoneTemplate.entries) {
+                val tLabel = when (template) {
+                    ZoneTemplate.DUAL_CHEEKS -> strings.zoneDualCheeks
+                    ZoneTemplate.CENTER_CORE -> strings.zoneCenterCore
+                    ZoneTemplate.UPPER_CREST -> strings.zoneUpperCrest
+                    ZoneTemplate.FULL_BODY -> strings.zoneFullCanvas
+                    ZoneTemplate.CLEAR -> strings.zoneClear
+                }
                 Box(
                     modifier = Modifier
                         .height(30.dp)
                         .clip(RoundedCornerShape(6.dp))
-                        .background(BlueRaised)
-                        .border(1.dp, BlueHairline, RoundedCornerShape(6.dp))
+                        .background(MaterialTheme.colorScheme.surfaceVariant)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(6.dp))
                         .clickable { onApplyTemplate(template) }
                         .padding(horizontal = 12.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = template.label,
+                        text = tLabel,
                         style = MonoTabularStyle,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -780,11 +891,14 @@ private fun BounceDockPanel(
     freq: Float,
     zeta: Float,
     softness: Float,
+    currentLanguage: AppLanguage,
     onSelectPreset: (MaterialPreset) -> Unit,
     onFreqChange: (Float) -> Unit,
     onZetaChange: (Float) -> Unit,
     onSoftnessChange: (Float) -> Unit
 ) {
+    val strings = AppStrings.forLang(currentLanguage)
+
     Column {
         Row(
             modifier = Modifier
@@ -794,14 +908,26 @@ private fun BounceDockPanel(
         ) {
             for (preset in MaterialPreset.entries) {
                 val selected = (preset == activeMaterial)
+                val presetTitle = when (preset) {
+                    MaterialPreset.SOFT_GEL -> strings.materialSoftGel
+                    MaterialPreset.WATER_DROP -> strings.materialWaterDrop
+                    MaterialPreset.LATEX_SNAP -> strings.materialLatexSnap
+                    MaterialPreset.WARM_DOUGH -> strings.materialWarmDough
+                    MaterialPreset.MEMORY_FOAM -> strings.materialMemoryFoam
+                }
                 Box(
                     modifier = Modifier
                         .height(32.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (selected) PrimaryBlueContainer else BlueRaised)
+                        .background(
+                            if (selected)
+                                MaterialTheme.colorScheme.primaryContainer
+                            else
+                                MaterialTheme.colorScheme.surfaceVariant
+                        )
                         .border(
                             1.dp,
-                            if (selected) PrimaryBlueLight else BlueHairline,
+                            if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                             RoundedCornerShape(8.dp)
                         )
                         .clickable { onSelectPreset(preset) }
@@ -809,9 +935,12 @@ private fun BounceDockPanel(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = preset.title,
+                        text = presetTitle,
                         style = MaterialTheme.typography.labelLarge,
-                        color = if (selected) TextPrimary else TextSecondary
+                        color = if (selected)
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        else
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -820,21 +949,21 @@ private fun BounceDockPanel(
         Spacer(modifier = Modifier.height(8.dp))
 
         CompactSliderRow(
-            label = "Speed",
+            label = strings.paramFrequency,
             value = freq,
             range = 3.0f..14.0f,
             formatted = "${String.format("%.1f", freq)} Hz",
             onValueChange = onFreqChange
         )
         CompactSliderRow(
-            label = "Damping",
+            label = strings.paramDamping,
             value = zeta,
             range = 0.06f..0.65f,
             formatted = String.format("%.2f", zeta),
             onValueChange = onZetaChange
         )
         CompactSliderRow(
-            label = "Stretch",
+            label = strings.paramSoftness,
             value = softness,
             range = 0.35f..1.00f,
             formatted = "${(softness * 100).toInt()}%",
@@ -860,8 +989,8 @@ private fun CompactSliderRow(
         Text(
             text = label,
             style = MaterialTheme.typography.bodyMedium,
-            color = TextSecondary,
-            modifier = Modifier.width(68.dp)
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.width(84.dp)
         )
         Slider(
             value = value,
@@ -869,15 +998,16 @@ private fun CompactSliderRow(
             valueRange = range,
             modifier = Modifier.weight(1f),
             colors = SliderDefaults.colors(
-                thumbColor = TextPrimary,
-                activeTrackColor = PrimaryBlueLight,
-                inactiveTrackColor = BlueRaised
+                thumbColor = MaterialTheme.colorScheme.primary,
+                activeTrackColor = MaterialTheme.colorScheme.primary,
+                inactiveTrackColor = MaterialTheme.colorScheme.surfaceVariant
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = formatted,
             style = MonoValueStyle,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.width(54.dp)
         )
     }
@@ -889,30 +1019,33 @@ private fun SoundOpticsDockPanel(
     soundEnabled: Boolean,
     hapticEnabled: Boolean,
     soundProfile: SoundProfile,
+    currentLanguage: AppLanguage,
     onToggleBlush: (Boolean) -> Unit,
     onToggleSound: (Boolean) -> Unit,
     onToggleHaptic: (Boolean) -> Unit,
     onSelectSoundProfile: (SoundProfile) -> Unit
 ) {
+    val strings = AppStrings.forLang(currentLanguage)
+
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            BlueChipButton(
-                text = "Blush",
+            FlatChipButton(
+                text = strings.toggleBlush,
                 selected = reactiveBlush,
                 onClick = { onToggleBlush(!reactiveBlush) },
                 modifier = Modifier.weight(1f)
             )
-            BlueChipButton(
-                text = "Audio",
+            FlatChipButton(
+                text = strings.soundFxToggle,
                 selected = soundEnabled,
                 onClick = { onToggleSound(!soundEnabled) },
                 modifier = Modifier.weight(1f)
             )
-            BlueChipButton(
-                text = "Haptic",
+            FlatChipButton(
+                text = strings.hapticToggle,
                 selected = hapticEnabled,
                 onClick = { onToggleHaptic(!hapticEnabled) },
                 modifier = Modifier.weight(1f)
@@ -925,24 +1058,37 @@ private fun SoundOpticsDockPanel(
         ) {
             for (profile in SoundProfile.entries) {
                 val selected = (profile == soundProfile)
+                val profileName = when (profile) {
+                    SoundProfile.TACTILE_STUDIO -> strings.soundProfileTactile
+                    SoundProfile.HYDRO_GEL -> strings.soundProfileHydro
+                    SoundProfile.FM_CHIME -> strings.soundProfileChime
+                }
                 Box(
                     modifier = Modifier
                         .weight(1f)
                         .height(32.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (selected) BlueRaisedActive else BlueDeepest)
+                        .background(
+                            if (selected)
+                                MaterialTheme.colorScheme.primaryContainer
+                            else
+                                MaterialTheme.colorScheme.surfaceVariant
+                        )
                         .border(
                             1.dp,
-                            if (selected) PrimaryBlueLight else BlueHairline,
+                            if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                             RoundedCornerShape(8.dp)
                         )
                         .clickable { onSelectSoundProfile(profile) },
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = profile.label,
+                        text = profileName,
                         style = MonoTabularStyle,
-                        color = if (selected) TextPrimary else TextSecondary
+                        color = if (selected)
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        else
+                            MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }
@@ -951,7 +1097,7 @@ private fun SoundOpticsDockPanel(
 }
 
 @Composable
-private fun BlueChipButton(
+private fun FlatChipButton(
     text: String,
     selected: Boolean,
     onClick: () -> Unit,
@@ -961,10 +1107,15 @@ private fun BlueChipButton(
         modifier = modifier
             .height(34.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(if (selected) PrimaryBlueContainer else BlueRaised)
+            .background(
+                if (selected)
+                    MaterialTheme.colorScheme.primaryContainer
+                else
+                    MaterialTheme.colorScheme.surfaceVariant
+            )
             .border(
                 1.dp,
-                if (selected) PrimaryBlueLight else BlueHairline,
+                if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
                 RoundedCornerShape(8.dp)
             )
             .clickable { onClick() },
@@ -973,7 +1124,10 @@ private fun BlueChipButton(
         Text(
             text = text,
             style = MaterialTheme.typography.labelLarge,
-            color = if (selected) TextPrimary else TextSecondary
+            color = if (selected)
+                MaterialTheme.colorScheme.onPrimaryContainer
+            else
+                MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

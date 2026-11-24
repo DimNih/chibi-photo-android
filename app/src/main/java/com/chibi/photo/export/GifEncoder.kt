@@ -50,6 +50,9 @@ class GifEncoder {
 
         val pixels = IntArray(width * height)
         resized.getPixels(pixels, 0, width, 0, 0, width, height)
+        if (resized != bitmap) {
+            resized.recycle()
+        }
 
         // Simple 256-color palette via uniform 3-3-2 quantization
         val colorMap = ByteArray(256 * 3)

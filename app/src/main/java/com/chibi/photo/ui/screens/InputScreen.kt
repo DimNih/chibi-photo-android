@@ -17,10 +17,13 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.FileUpload
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.Tune
 import androidx.compose.material3.*
@@ -38,12 +41,19 @@ import com.chibi.photo.audio.ProceduralAudioEngine
 import com.chibi.photo.physics.MaterialPreset
 import com.chibi.photo.physics.MochiMeshEngine
 import com.chibi.photo.physics.ZoneTemplate
+import com.chibi.photo.ui.AppLanguage
+import com.chibi.photo.ui.AppStrings
 import com.chibi.photo.ui.components.CharacterPresets
 import com.chibi.photo.ui.components.PresetCharacter
-import com.chibi.photo.ui.theme.*
+import com.chibi.photo.ui.theme.MonoTabularStyle
+import com.chibi.photo.ui.theme.StudioTheme
 
 @Composable
 fun InputScreen(
+    isDarkMode: Boolean,
+    onToggleDarkMode: () -> Unit,
+    currentLanguage: AppLanguage,
+    onToggleLanguage: () -> Unit,
     onOpenWorkbench: (
         bitmap: Bitmap,
         title: String,
@@ -53,6 +63,7 @@ fun InputScreen(
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
+    val strings = AppStrings.forLang(currentLanguage)
 
     var activePreset by remember { mutableStateOf(CharacterPresets.all.first()) }
     val heroBitmap = remember(activePreset.id) { activePreset.generator(560) }
@@ -99,7 +110,7 @@ fun InputScreen(
             if (bitmap != null) {
                 onOpenWorkbench(
                     bitmap,
-                    "Photo",
+                    if (currentLanguage == AppLanguage.ID) "Foto Pribadi" else "Custom Photo",
                     MaterialPreset.SOFT_GEL,
                     ZoneTemplate.DUAL_CHEEKS
                 )
@@ -110,78 +121,133 @@ fun InputScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BlueBackground)
+            .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .navigationBarsPadding()
             .verticalScroll(scrollState)
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // Clean Header: Chibi Logo + App Name + Import Action
+        // App Header: Chibi Logo + Title + Language Toggle + Dark Mode Toggle + Import
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(44.dp),
+                .height(48.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
+            // Chibi Logo & Brand
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val logoThumb = remember { CharacterPresets.all.first().generator(96) }
                 Image(
                     bitmap = logoThumb.asImageBitmap(),
                     contentDescription = "Chibi Photo Logo",
                     modifier = Modifier
-                        .size(34.dp)
-                        .clip(RoundedCornerShape(8.dp))
-                        .border(1.dp, BlueHairlineStrong, RoundedCornerShape(8.dp))
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .border(1.5.dp, MaterialTheme.colorScheme.primary, CircleShape)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "Chibi Photo",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = TextPrimary
-                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = strings.appTitle,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = strings.tagline,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
 
-            Surface(
-                modifier = Modifier
-                    .height(34.dp)
-                    .clickable {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
-                shape = RoundedCornerShape(8.dp),
-                color = BlueRaised,
-                border = BorderStroke(1.dp, BlueHairline)
+            // Quick Control Pills
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                // Language Toggle Pill
+                Surface(
+                    modifier = Modifier
+                        .height(32.dp)
+                        .clickable { onToggleLanguage() },
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    Icon(
-                        imageVector = Icons.Outlined.FileUpload,
-                        contentDescription = null,
-                        tint = TextSecondary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = "Import",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = TextPrimary
-                    )
+                    Row(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (currentLanguage == AppLanguage.ID) "🇮🇩 ID" else "🇬🇧 EN",
+                            style = MonoTabularStyle,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+
+                // Dark/Light Mode Toggle Button
+                Surface(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable { onToggleDarkMode() },
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = if (isDarkMode) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
+                            contentDescription = if (isDarkMode) strings.lightMode else strings.darkMode,
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
+                }
+
+                // Import Photo Button
+                Surface(
+                    modifier = Modifier
+                        .height(32.dp)
+                        .clickable {
+                            photoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        },
+                    shape = RoundedCornerShape(8.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
+                ) {
+                    Row(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.FileUpload,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimary,
+                            modifier = Modifier.size(15.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(
+                            text = if (currentLanguage == AppLanguage.ID) "Foto" else "Import",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(14.dp))
 
-        // Live Interactive Hero Card (Clean, minimal text, direct touch interaction)
+        // Interactive Hero Preview Card (Flat Light-Blue or Dark surface, zero gradient)
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(16.dp),
-            color = BlueCard,
-            border = BorderStroke(1.dp, BlueHairline)
+            color = MaterialTheme.colorScheme.surface,
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -193,20 +259,20 @@ fun InputScreen(
                         Box(
                             modifier = Modifier
                                 .size(8.dp)
-                                .clip(RoundedCornerShape(4.dp))
-                                .background(PrimaryBlueLight)
+                                .clip(CircleShape)
+                                .background(MaterialTheme.colorScheme.primary)
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             text = activePreset.name,
                             style = MaterialTheme.typography.titleMedium,
-                            color = TextPrimary
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                     Text(
-                        text = activePreset.tag,
+                        text = strings.tapToSquishHint,
                         style = MonoTabularStyle,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -215,10 +281,10 @@ fun InputScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(256.dp)
+                        .height(260.dp)
                         .clip(RoundedCornerShape(12.dp))
-                        .background(BlueDeepest)
-                        .border(1.dp, BlueHairline, RoundedCornerShape(12.dp)),
+                        .background(StudioTheme.extended.bgBackdrop)
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp)),
                     contentAlignment = Alignment.Center
                 ) {
                     val meshPaint = remember {
@@ -227,7 +293,7 @@ fun InputScreen(
 
                     Canvas(
                         modifier = Modifier
-                            .size(236.dp)
+                            .size(240.dp)
                             .pointerInput(activePreset.id) {
                                 awaitPointerEventScope {
                                     while (true) {
@@ -266,30 +332,38 @@ fun InputScreen(
                         }
                     }
 
-                    // Simple Mesh toggle chip
+                    // Wireframe Grid Toggle Chip
                     Box(
                         modifier = Modifier
                             .align(Alignment.TopEnd)
                             .padding(10.dp)
                             .clip(RoundedCornerShape(6.dp))
-                            .background(if (previewEngine.showWireframeLattice) PrimaryBlue else BlueCard)
-                            .border(1.dp, BlueHairline, RoundedCornerShape(6.dp))
+                            .background(
+                                if (previewEngine.showWireframeLattice)
+                                    MaterialTheme.colorScheme.primary
+                                else
+                                    MaterialTheme.colorScheme.surfaceVariant
+                            )
+                            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(6.dp))
                             .clickable {
                                 previewEngine.showWireframeLattice = !previewEngine.showWireframeLattice
                             }
                             .padding(horizontal = 10.dp, vertical = 4.dp)
                     ) {
                         Text(
-                            text = "Grid",
+                            text = if (currentLanguage == AppLanguage.ID) "Kisi" else "Grid",
                             style = MonoTabularStyle,
-                            color = if (previewEngine.showWireframeLattice) TextPrimary else TextSecondary
+                            color = if (previewEngine.showWireframeLattice)
+                                MaterialTheme.colorScheme.onPrimary
+                            else
+                                MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(14.dp))
 
-                // Solid Royal Blue Primary Action Button
+                // Solid Flat Primary Action Button (Buka Studio / Open Studio)
                 Button(
                     onClick = {
                         onOpenWorkbench(
@@ -301,11 +375,11 @@ fun InputScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(44.dp),
+                        .height(46.dp),
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = PrimaryBlue,
-                        contentColor = TextPrimary
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     )
                 ) {
                     Icon(
@@ -315,9 +389,8 @@ fun InputScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = "Open studio",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = TextPrimary
+                        text = strings.openStudio,
+                        style = MaterialTheme.typography.labelLarge
                     )
                 }
             }
@@ -325,15 +398,16 @@ fun InputScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
+        // Preset Characters Section
         Text(
-            text = "Characters",
+            text = strings.choosePreset,
             style = MaterialTheme.typography.titleMedium,
-            color = TextPrimary
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Clean 2x2 Character Grid
+        // Clean 2x2 Grid of Presets
         val rows = CharacterPresets.all.chunked(2)
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             for (rowItems in rows) {
@@ -362,7 +436,7 @@ fun InputScreen(
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
@@ -379,8 +453,11 @@ private fun CharacterGridCard(
     Surface(
         modifier = modifier.clickable { onSelectPreview() },
         shape = RoundedCornerShape(12.dp),
-        color = if (isSelected) BlueRaised else BlueCard,
-        border = BorderStroke(1.5.dp, if (isSelected) PrimaryBlueLight else BlueHairline)
+        color = if (isSelected) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface,
+        border = BorderStroke(
+            1.5.dp,
+            if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+        )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Box(
@@ -388,7 +465,7 @@ private fun CharacterGridCard(
                     .fillMaxWidth()
                     .height(116.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(BlueDeepest),
+                    .background(StudioTheme.extended.bgBackdrop),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
@@ -409,12 +486,12 @@ private fun CharacterGridCard(
                     Text(
                         text = preset.name,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = TextPrimary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                     Text(
                         text = preset.tag,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = TextSecondary
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
 
@@ -422,15 +499,23 @@ private fun CharacterGridCard(
                     modifier = Modifier
                         .size(30.dp)
                         .clip(RoundedCornerShape(8.dp))
-                        .background(if (isSelected) PrimaryBlue else BlueDeepest)
-                        .border(1.dp, BlueHairline, RoundedCornerShape(8.dp))
+                        .background(
+                            if (isSelected)
+                                MaterialTheme.colorScheme.primary
+                            else
+                                MaterialTheme.colorScheme.surfaceVariant
+                        )
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(8.dp))
                         .clickable { onOpenDirect() },
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.PlayArrow,
                         contentDescription = "Play",
-                        tint = TextPrimary,
+                        tint = if (isSelected)
+                            MaterialTheme.colorScheme.onPrimary
+                        else
+                            MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.size(16.dp)
                     )
                 }

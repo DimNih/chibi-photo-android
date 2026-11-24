@@ -3,28 +3,46 @@ package com.chibi.photo.ui.theme
 import androidx.compose.ui.graphics.Color
 
 /**
- * Flat Blue Studio Palette (Zero gradients, Unslop 4px grid & 3 text roles)
+ * Flat Light-Blue Studio Palette (Strictly zero gradients, unslop solid tones)
  */
-val BlueDeepest = Color(0xFF0A101D)       // Deepest stage background
-val BlueBackground = Color(0xFF0F172A)    // Main app surface (Slate Navy 900)
-val BlueCard = Color(0xFF162038)          // Card surface
-val BlueRaised = Color(0xFF1E2D4D)        // Raised control / button surface
-val BlueRaisedActive = Color(0xFF273A63)  // Active surface step
 
-// Solid hairline borders (no neon glow)
-val BlueHairline = Color(0xFF263554)
-val BlueHairlineStrong = Color(0xFF364B75)
+// Light Theme (Biru Muda / Clean Sky & Ice Blue)
+val LightBgBackdrop = Color(0xFFE6F2FE)
+val LightBgMain = Color(0xFFF0F7FF)
+val LightSurfaceCard = Color(0xFFFFFFFF)
+val LightSurfaceRaised = Color(0xFFE0F2FE)
+val LightSurfaceRaisedActive = Color(0xFFBAE6FD)
 
-// Three strict text roles
-val TextPrimary = Color(0xFFF1F5F9)
-val TextSecondary = Color(0xFF94A3B8)
-val TextMuted = Color(0xFF64748B)
+val LightBorderHairline = Color(0xFFBFDBFE)
+val LightBorderStrong = Color(0xFF93C5FD)
 
-// Primary solid blue accent (Royal Blue / Clear Cobalt, zero gradient)
-val PrimaryBlue = Color(0xFF2563EB)
-val PrimaryBlueLight = Color(0xFF3B82F6)
-val PrimaryBlueContainer = Color(0xFF1D3566)
+val LightTextPrimary = Color(0xFF0F172A)
+val LightTextSecondary = Color(0xFF334155)
+val LightTextMuted = Color(0xFF64748B)
+
+val LightPrimaryBlue = Color(0xFF0284C7)
+val LightPrimaryBlueActive = Color(0xFF0369A1)
+val LightPrimaryContainer = Color(0xFFE0F2FE)
+
+// Dark Theme (Biru Malam / Clean Slate Blue)
+val DarkBgBackdrop = Color(0xFF070E1A)
+val DarkBgMain = Color(0xFF0B162A)
+val DarkSurfaceCard = Color(0xFF12223D)
+val DarkSurfaceRaised = Color(0xFF1B3156)
+val DarkSurfaceRaisedActive = Color(0xFF264475)
+
+val DarkBorderHairline = Color(0xFF223C66)
+val DarkBorderStrong = Color(0xFF35588F)
+
+val DarkTextPrimary = Color(0xFFF8FAFC)
+val DarkTextSecondary = Color(0xFF94A3B8)
+val DarkTextMuted = Color(0xFF64748B)
+
+val DarkPrimaryBlue = Color(0xFF38BDF8)
+val DarkPrimaryBlueActive = Color(0xFF7DD3FC)
+val DarkPrimaryContainer = Color(0xFF0C4A6E)
 
 // Semantic flat colors
 val SemanticGreen = Color(0xFF10B981)
 val SemanticRed = Color(0xFFEF4444)
+val BlushRose = Color(0xFFFB7185)

@@ -53,7 +53,7 @@ object CharacterPresets {
         )
     )
 
-    private fun drawFlatBackdrop(canvas: Canvas, s: Float, fillColor: Int) {
+    private fun drawFlatBackdrop(canvas: Canvas, s: Float, fillColor: Int = 0xFFE0F2FE.toInt()) {
         val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = fillColor
             style = Paint.Style.FILL
@@ -61,9 +61,9 @@ object CharacterPresets {
         canvas.drawCircle(s * 0.5f, s * 0.5f, s * 0.46f, bgPaint)
 
         val borderPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = 0xFF263554.toInt()
+            color = 0xFFBFDBFE.toInt()
             style = Paint.Style.STROKE
-            strokeWidth = s * 0.008f
+            strokeWidth = s * 0.010f
         }
         canvas.drawCircle(s * 0.5f, s * 0.5f, s * 0.46f, borderPaint)
     }

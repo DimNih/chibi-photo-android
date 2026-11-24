@@ -567,7 +567,7 @@ class MochiMeshEngine(
                 val avgDispX = ((currX[left] - origX[left]) +
                         (currX[right] - origX[right]) +
                         (currX[up] - origX[up]) +
-                        (currX[down] - origY[down] * 0f - origX[down])) * 0.25f
+                        (currX[down] - origX[down])) * 0.25f
 
                 val avgDispY = ((currY[left] - origY[left]) +
                         (currY[right] - origY[right]) +

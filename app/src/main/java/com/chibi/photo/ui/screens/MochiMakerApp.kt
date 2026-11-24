@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.compose.runtime.*
 import com.chibi.photo.physics.MaterialPreset
 import com.chibi.photo.physics.ZoneTemplate
+import com.chibi.photo.ui.AppLanguage
 
 enum class AppScreen {
     ARCHIVE,
@@ -11,7 +12,12 @@ enum class AppScreen {
 }
 
 @Composable
-fun MochiMakerApp() {
+fun MochiMakerApp(
+    isDarkMode: Boolean,
+    onToggleDarkMode: () -> Unit,
+    currentLanguage: AppLanguage,
+    onToggleLanguage: () -> Unit
+) {
     var currentScreen by remember { mutableStateOf(AppScreen.ARCHIVE) }
     var activeBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var activeTitle by remember { mutableStateOf("Astrid") }
@@ -21,6 +27,10 @@ fun MochiMakerApp() {
     when (currentScreen) {
         AppScreen.ARCHIVE -> {
             InputScreen(
+                isDarkMode = isDarkMode,
+                onToggleDarkMode = onToggleDarkMode,
+                currentLanguage = currentLanguage,
+                onToggleLanguage = onToggleLanguage,
                 onOpenWorkbench = { bmp, title, material, zone ->
                     activeBitmap = bmp
                     activeTitle = title
@@ -37,6 +47,10 @@ fun MochiMakerApp() {
                     specimenTitle = activeTitle,
                     initialMaterial = activeMaterial,
                     initialZone = activeZone,
+                    isDarkMode = isDarkMode,
+                    onToggleDarkMode = onToggleDarkMode,
+                    currentLanguage = currentLanguage,
+                    onToggleLanguage = onToggleLanguage,
                     onBackToStudio = { currentScreen = AppScreen.ARCHIVE }
                 )
             }

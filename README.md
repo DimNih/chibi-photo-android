@@ -3,37 +3,39 @@
 </p>
 
 <p align="center">
-  <strong>Interactive 2D spring-damper mesh studio for chibi art and portraits on Android.</strong>
+  <strong>Studio foto chibi kenyal & interaktif berbasis fisika mesh pegas elastis di Android.</strong><br>
+  <em>Interactive 2D spring-damper mesh studio for chibi art, characters, and squishy portraits on Android.</em>
 </p>
 
 <p align="center">
-  <a href="https://github.com/DimNih/chibi-photo-android/releases"><img src="https://img.shields.io/badge/Build-Release_v1.0.0-2563EB.svg?logo=android&logoColor=white" alt="Release Build"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-3B82F6.svg" alt="License: MIT"></a>
-  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-2.1.0-2563EB.svg?logo=kotlin&logoColor=white" alt="Kotlin 2.1.0"></a>
-  <a href="https://developer.android.com/compose"><img src="https://img.shields.io/badge/Jetpack_Compose-2025.02-1D4ED8.svg?logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"></a>
+  <a href="https://github.com/DimNih/chibi-photo-android/releases"><img src="https://img.shields.io/badge/Build-Release_v1.0.0-0284C7.svg?logo=android&logoColor=white" alt="Release Build"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-38BDF8.svg" alt="License: MIT"></a>
+  <a href="https://kotlinlang.org/"><img src="https://img.shields.io/badge/Kotlin-2.1.0-0284C7.svg?logo=kotlin&logoColor=white" alt="Kotlin 2.1.0"></a>
+  <a href="https://developer.android.com/compose"><img src="https://img.shields.io/badge/Jetpack_Compose-2025.02-0369A1.svg?logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"></a>
   <a href="https://developer.android.com/"><img src="https://img.shields.io/badge/API-26--35_(Android_8.0%2B)-0F172A.svg" alt="Android API 26-35"></a>
   <a href="https://github.com/DimNih/chibi-photo-android/stargazers"><img src="https://img.shields.io/github/stars/DimNih/chibi-photo-android?style=social" alt="GitHub Stars"></a>
 </p>
 
 ---
 
-## Overview
+## Fitur Utama / Key Features
 
-**Chibi Photo** turns 2D chibi drawings, character portraits, and photos into interactive elastic surfaces on Android.
-
-It runs a **240 Hz sub-stepped harmonic spring-damper mesh** rendered directly on the GPU canvas alongside a **44.1 kHz procedural PCM audio engine**:
-
-1. **Live Character Stage:** Test touch-recoil physics directly on the home screen or import custom photos from your gallery.
-2. **4-Tab Studio Workbench:** Switch between 5 touch tools (`Pinch`, `Poke`, `Swirl`, `Pulse`, `Tilt`), symmetrical `Mirror-X` mask painting, bounce calibration, and GIF/PNG export.
+- 🎨 **Tema Biru Muda (Pure Flat Light Blue):** Desain bersih bebas *AI-slop*, tanpa gradien (*zero gradients*), palet solid bernuansa biru muda cerah dengan garis batas tipis presisi 1.dp.
+- ☀️/🌙 **Mode Gelap & Terang (Dark & Light Mode):** Pergantian instan antara tema *Light Ice Blue* (`#F0F7FF`) yang sejuk dan *Dark Midnight Slate* (`#0B162A`).
+- 🇮🇩/🇬🇧 **Dukungan Dua Bahasa (Indonesian & English):** Beralih bahasa (`ID` / `EN`) secara instan kapan saja langsung dari bilah atas aplikasi.
+- 🐱 **Logo Kartun Chibi Asli:** Ikon maskot kartun chibi yang imut dengan mata anime berbinar, rona pipi squishy, dan tangan kecil yang sedang mencubit pipi.
+- ⚡ **Engine Fisika 240 Hz:** Simulasi mesh pegas-peredam *symplectic* 33x33 berkecepatan tinggi dengan respons pantulan alami dan efek rona wajah dinamis saat ditarik (*reactive strain blush*).
+- 🎵 **Sintesis Audio Prosedural 44.1 kHz:** Suara kenyal (*squish & bounce*) dihasilkan secara real-time via PCM AudioTrack tanpa aset suara eksternal.
+- 🎬 **Perekam GIF & Foto Instan:** Rekam animasi goyangan chibi ke format GIF berulang (*infinite loop*) atau simpan foto resolusi penuh ke galeri.
 
 ---
 
-## Architecture
+## Arsitektur Sistem / Architecture
 
 ```
                +---------------------------------------------------+
                |             Chibi Photo Compose UI                |
-               |     (Home Stage / 4-Tab Studio Workbench)         |
+               |       Theme (Light / Dark) · Lang (ID / EN)       |
                +---------+---------------+---------------+---------+
                          |               |               |
            Multi-Touch & |               | Accelerometer | Frame Capture
@@ -49,93 +51,64 @@ It runs a **240 Hz sub-stepped harmonic spring-damper mesh** rendered directly o
            v (drawBitmapMesh)          v (Velocity / Strain)
 +----------+--------------+   +--------+------------------+
 |  Hardware GPU Canvas    |   |  ProceduralAudioEngine    |
-|  + Flat Cel Blush & 3D  |   |  44.1 kHz PCM AudioTrack  |
+|  + Flat Blush & Specular|   |  44.1 kHz PCM AudioTrack  |
 +-------------------------+   +---------------------------+
 ```
 
 ---
 
-## Operating Modes
+## Alat & Kontrol Studio / Studio Controls
 
-### 1. Touch Tools (`Touch` Tab)
+### 1. Alat Sentuh / Touch Tools (`Sentuh` / `Touch`)
 
-- **Pinch:** Pull elastic zones with multi-touch support and high-velocity spring recoil upon release.
-- **Poke:** Tap or press to push vertices outward and trigger radial shockwave ripples.
-- **Swirl:** Twist vertices around the touch point with rotational spring torque.
-- **Pulse:** Auto-bounce active zones to a configurable tempo (`60–180 BPM`) for hands-free GIF recording.
-- **Gravity:** Tilt or shake your phone to sway elastic zones using the hardware accelerometer.
+- **Cubit / Pinch:** Tarik dan renggangkan pipi dengan sentuhan multi-touch dan recoil pegas elastis saat dilepas.
+- **Tusuk / Poke:** Tekan permukaan untuk membuat lekukan ke dalam dan memicu riak gelombang ke luar.
+- **Putar / Swirl:** Puntir dan putar simpul di sekitar titik sentuhan dengan torsi pegas rotasi.
+- **Denyut / Pulse:** Goyangan otomatis berulang mengikuti tempo ketukan (`60–180 BPM`) untuk perekaman GIF.
+- **Gravitasi / Gravity:** Miringkan atau goyangkan HP untuk menggerakkan bagian elastis menggunakan sensor akselerometer.
 
-### 2. Symmetrical Masking (`Mask` Tab)
+### 2. Topeng Simetris / Masking (`Topeng` / `Mask`)
 
-Paint or erase elasticity weights directly over the live character canvas:
+Warnai atau hapus area elastis langsung di atas kanvas:
+- **Simetri Kanan-Kiri (Mirror-X):** Mengoles pipi kiri otomatis merefleksikan sapuan ke pipi kanan secara simetris.
+- **Pola Instan:** `Kedua Pipi`, `Pusat Inti`, `Puncak Kepala`, `Seluruh Layar`, atau `Hapus Semua`.
 
-- **Mirror-X:** Painting one cheek mirrors strokes across the center axis automatically.
-- **Quick Templates:** Apply `Dual cheeks`, `Center core`, `Upper crests`, `Full canvas`, or `Clear all` in one tap.
+### 3. Karakteristik Bahan / Materials (`Pantulan` / `Bounce`)
 
-### 3. Material Presets (`Bounce` Tab)
-
-| Preset          | Frequency ($f$) | Damping ($\zeta$) | Stretch | Response                           |
-| :-------------- | :-------------- | :---------------- | :------ | :--------------------------------- |
-| **Soft gel**    | `6.8 Hz`        | `0.13`            | `95%`   | Multi-cycle chibi cheek bounce     |
-| **Water drop**  | `5.2 Hz`        | `0.08`            | `94%`   | Low-damping ripple wave            |
-| **Latex snap**  | `11.2 Hz`       | `0.11`            | `84%`   | Fast, high-tension vibration       |
-| **Warm dough**  | `4.6 Hz`        | `0.28`            | `98%`   | Soft, heavy mochi rebound          |
-| **Memory foam** | `3.2 Hz`        | `0.62`            | `82%`   | Slow viscous return without bounce |
-
----
-
-## Studio Preview
-
-| Home Stage | Touch Workbench |
-| :---: | :---: |
-| <img src="assets/screen-archive.png" alt="Home Stage" width="300"> | <img src="assets/screen-workbench.png" alt="Touch Workbench" width="300"> |
-| **Mirror-X Masking** | **Bounce Calibration** |
-| <img src="assets/screen-sculpt.png" alt="Mirror-X Masking" width="300"> | <img src="assets/screen-material.png" alt="Bounce Calibration" width="300"> |
+| Bahan / Preset  | Frekuensi ($f$) | Redaman ($\zeta$) | Kelenturan | Karakter Pantulan                 |
+| :-------------- | :-------------- | :---------------- | :--------- | :-------------------------------- |
+| **Gel Lembut**  | `6.8 Hz`        | `0.13`            | `95%`      | Goyangan pipi kenyal lembut       |
+| **Tetes Air**   | `5.2 Hz`        | `0.08`            | `94%`      | Riak gelombang berulang           |
+| **Karet Elastis**| `11.2 Hz`      | `0.11`            | `84%`      | Tegangan kencang & cepat kembali  |
+| **Adonan Hangat**| `4.6 Hz`       | `0.28`            | `98%`      | Empuk mantap & rebound berbobot   |
+| **Busa Memori** | `3.2 Hz`        | `0.62`            | `82%`      | Kembali perlahan tanpa pantulan   |
 
 ---
 
-## Quickstart & Production Build
+## Build Produksi & Instalasi / Production Build
 
-### 1. Build Signed Release APK
-
-The project is configured with R8 minification, resource shrinking, and V1/V2/V3 release signing:
+Proyek ini telah dikonfigurasi dengan minifikasi **R8**, pemotongan sumber daya (*resource shrinking*), dan penandatanganan rilis V1/V2/V3:
 
 ```powershell
 # Windows PowerShell
+$env:JAVA_HOME = 'C:\Program Files\Microsoft\jdk-21.0.13.102-hotspot'
 .\gradlew.bat assembleRelease
 
-# macOS / Linux
+# Linux / macOS
 ./gradlew assembleRelease
 ```
 
-Output location:
+File APK siap pakai:
+- `dist/ChibiPhoto-v1.0.0-release.apk` *(~916 KB)*
+- `app/build/outputs/apk/release/ChibiPhoto-v1.0.0-release.apk`
 
-```text
-dist/ChibiPhoto-v1.0.0-release.apk
-app/build/outputs/apk/release/ChibiPhoto-v1.0.0-release.apk
-```
-
-### 2. Install to Android Device
-
+Pasang langsung ke perangkat Android:
 ```bash
 adb install -r dist/ChibiPhoto-v1.0.0-release.apk
 ```
 
 ---
 
-## Engine Parameters
+## Lisensi / License
 
-| Parameter           | Default    | Range            | Description                                              |
-| :------------------ | :--------- | :--------------- | :------------------------------------------------------- |
-| `meshWidth / Height`| `32 x 32`  | `16 .. 64`       | Vertex grid resolution (`1,089` active vertices)         |
-| `wobbleFrequency`   | `6.8 Hz`   | `3.0 .. 14.0 Hz` | Spring oscillation speed ($f$)                           |
-| `dampingZeta`       | `0.13`     | `0.06 .. 0.65`   | Damping ratio ($\zeta$); lower values bounce more times  |
-| `softness`          | `0.95`     | `0.35 .. 1.00`   | Maximum elastic stretch multiplier                       |
-| `pulseBpm`          | `116 BPM`  | `60 .. 180 BPM`  | Auto-oscillation tempo in `Pulse` mode                   |
-
----
-
-## License
-
-Distributed under the [MIT License](LICENSE).
-
+Didistribusikan di bawah lisensi [MIT License](LICENSE).
